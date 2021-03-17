@@ -11,7 +11,7 @@ const RestaurantsStack = createStackNavigator();
 export const RestaurantStackNavigator = () => (
   <RestaurantsStack.Navigator
     headerMode="false"
-    // screenOptions={{ ...TransitionPresets.ModalSlideFromBottomIOS }}
+    screenOptions={{ ...TransitionPresets.ModalSlideFromBottomIOS }}
   >
     {/* Component will pass props "navigation" by default to the component*/}
     <RestaurantsStack.Screen name="Restaurants" component={RestaurantScreen} />

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { TouchableOpacity } from 'react-native';
 import { Colors } from 'react-native-paper';
 import { RestaurantInfoCard } from '../components/Restaurant-Info-Card';
@@ -12,10 +12,14 @@ import { SafeAreaContainer } from '../../../components/SafeAreaView';
 import { RestaurantsContext } from '../../../services/restaurant.context';
 import { SearchBar } from '../components/SearchBar.component';
 import { LocationContext } from '../../../services/location/location.context';
+import { FavouriteContext } from '../../../services/favourite/favourite.context';
+import { FavouritesBar } from '../../../components/FavouritesBar.component';
 
 export const RestaurantScreen = ({ navigation }) => {
   const { isLocationLoading } = useContext(LocationContext);
   const { restaurants, isLoading } = useContext(RestaurantsContext);
+  const { favourites } = useContext(FavouriteContext);
+  const [isToggled, setIsToggled] = useState(false);
 
   const renderRestaurantList = () => {
     if (isLoading || isLocationLoading) {
@@ -31,7 +35,7 @@ export const RestaurantScreen = ({ navigation }) => {
               <TouchableOpacity
                 onPress={() =>
                   navigation.navigate('RestaurantDetail', {
-                    singleRestaurant: item,
+                    restaurant: item,
                   })
                 }
               >
@@ -49,7 +53,16 @@ export const RestaurantScreen = ({ navigation }) => {
 
   return (
     <SafeAreaContainer>
-      <SearchBar />
+      <SearchBar
+        isFavouritesToggled={isToggled}
+        onFavouritesToggled={() => setIsToggled(!isToggled)}
+      />
+      {isToggled && (
+        <FavouritesBar
+          favourites={favourites}
+          onNavigate={navigation.navigate}
+        />
+      )}
       <RestaurantListPage>{renderRestaurantList()}</RestaurantListPage>
     </SafeAreaContainer>
   );
